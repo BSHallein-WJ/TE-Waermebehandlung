@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wärmebehandlung von Stahl</title>
+    <link rel="icon" type="image/png" href="App-Logo.png">
+    <link rel="apple-touch-icon" href="App-Logo.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0b57a4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Wärmebehandlung">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="app-container">
+        <div class="header">
+            <div class="header-title-container">
+                <h1 id="category-title">Wärmebehandlung von Stahl</h1>
+                <div class="progress-wrapper" id="progress-wrapper" style="display: none;">
+                    <div class="progress" id="progress">Frage 1 von 1</div>
+                    <div class="progress-bar" aria-hidden="true">
+                        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-order-toggle" id="order-toggle-button" onclick="toggleQuestionOrder()"
+                    title="Reihenfolge wechseln" aria-label="Reihenfolge wechseln">Modus: Sortiert</button>
+                <button class="btn-burger" onclick="toggleMenu()" title="Menü öffnen"
+                    aria-label="Menü öffnen">&#9776;</button>
+            </div>
+        </div>
+
+        <!-- Menü mit Navigation und Rechtshinweisen -->
+        <div class="menu-dropdown" id="menu-dropdown">
+            <button type="button" onclick="goToStart()">Startseite</button>
+            <button type="button" onclick="toggleDarkMode()" id="dark-mode-button">Darkmode</button>
+            <button type="button" onclick="setQuestionOrder('mixed')">Fragen gemischt stellen</button>
+            <button type="button" onclick="setQuestionOrder('sequential')">Fragen der Reihe nach</button>
+            <button type="button" onclick="openLegalModal()">Impressum & Datenschutz</button>
+            <button type="button" onclick="closeApp()">App schließen</button>
+        </div>
+
+        <div class="content-area">
+            <div class="start-screen" id="start-screen">
+                <div class="start-intro">
+                    <h2>Teste und festige dein Wissen!</h2>
+                    <p>Beantworte Fragen zu Wärmebehandlung, Glühen, Härten und Vergüten. Die integrierten Erklärungen
+                        helfen dir, die Lösungen zu verstehen.</p>
+                </div>
+                <img src="Titelbild.png" alt="Wärmebehandlung von Stahl" class="start-image">
+                <div class="category-buttons" id="category-buttons"></div>
+            </div>
+
+            <div id="quiz-screen" style="display: none;">
+                <div class="question-box" id="question">
+                    <span class="level-indicator" id="level-indicator" aria-label="Wissensniveau"></span>
+                    <span id="question-text">Lade Frage...</span>
+                </div>
+                <div id="question-images"></div>
+                <div class="solution-box" id="solution-box">
+                    <div class="solution-title"><span class="solution-icon" aria-hidden="true">&#10003;</span>Lösung &
+                        Erklärung</div>
+                    <div class="solution-answer" id="solution-answer"></div>
+                    <div id="solution-images"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-buttons" id="footer-buttons" style="display: none;">
+            <button class="btn-home" onclick="goToStart()">Home</button>
+            <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">Zurück</button>
+            <button class="btn-solve" onclick="toggleSolution()">Lösung</button>
+            <button class="btn-next" id="btn-next" onclick="nextQuestion()">Weiter</button>
+        </div>
+    </div>
+
+    <div class="image-viewer" id="image-viewer" aria-hidden="true">
+        <img id="viewer-image" src="" alt="">
+    </div>
+
+    <!-- Modal für Datenschutz & Impressum -->
+    <div id="legal-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLegalModal()">&times;</span>
+            <h3>Impressum & Datenschutz</h3>
+            <h4>Impressum</h4>
+            <p><strong>Medieninhaber, Herausgeber und für den Inhalt verantwortlich:</strong><br>
+                Josef Wallmann<br>
+                c/o Christine Weißenbacher<br>
+                Gaißau 172<br>
+                5425 Krispl<br>
+                Österreich</p>
+
+            <p><strong>Kontakt:</strong><br>
+                E-Mail: BS.Hallein@gmail.com</p>
+
+            <p><strong>Hinweis:</strong><br>
+                Dieses Lernangebot ist ein privates, nicht kommerzielles Projekt und dient ausschließlich
+                Bildungszwecken. Es besteht kein offizieller Zusammenhang mit einer Schule oder sonstigen
+                Bildungseinrichtung.</p>
+
+            <h4>Datenschutz</h4>
+            <p><strong>Verantwortlicher:</strong><br>
+                Josef Wallmann, c/o Christine Weißenbacher, Gaißau 172, 5425 Krispl, Österreich<br>
+                E-Mail: <a href="mailto:BS.Hallein@gmail.com">BS.Hallein@gmail.com</a></p>
+
+            <p><strong>Besuch der Website und Hosting:</strong><br>
+                Diese Website wird mit GitHub Pages bereitgestellt. Beim Aufruf verarbeitet GitHub nach eigener
+                Auskunft die IP-Adresse der Besucher:innen und kann weitere technische Verbindungsdaten erfassen,
+                insbesondere zur Bereitstellung und Sicherheit des Dienstes. Die Verarbeitung dient dem Betrieb
+                und der Absicherung der Website. Soweit ich dafür datenschutzrechtlich verantwortlich bin, stütze
+                ich sie auf mein berechtigtes Interesse gemäß Art. 6 Abs. 1 lit. f DSGVO an einem sicheren und
+                funktionsfähigen Webangebot. Empfänger ist GitHub als Hosting-Anbieter; eine Verarbeitung durch
+                GitHub-Unternehmen in den USA oder anderen Staaten kann nicht ausgeschlossen werden. Informationen
+                zu Zwecken, Speicherdauer und möglichen internationalen Übermittlungen finden Sie in der
+                <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+                    target="_blank" rel="noopener noreferrer">Datenschutzerklärung von GitHub</a> und in der
+                <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages"
+                    target="_blank" rel="noopener noreferrer">Dokumentation zu GitHub Pages</a>. Auf die dortige
+                Verarbeitung und deren konkrete Speicherdauer habe ich keinen unmittelbaren Einfluss.
+            </p>
+
+            <p><strong>Lokale Darkmode-Einstellung:</strong><br>
+                Wenn Sie den Darkmode aktivieren oder deaktivieren, speichert die Anwendung Ihre Auswahl im
+                Local Storage Ihres Browsers, damit sie beim nächsten Besuch erhalten bleibt. Dieser Eintrag
+                wird nicht an mich übermittelt und bleibt gespeichert, bis Sie ihn in den Website-Daten Ihres
+                Browsers löschen. Sie können den Darkmode auch verwenden, ohne diese Einstellung dauerhaft
+                zu speichern, indem Sie die Website-Daten nach dem Besuch löschen.</p>
+
+            <p>Die Anwendung selbst verwendet keine Analyse- oder Werbedienste und setzt keine eigenen Cookies.</p>
+
+            <p><strong>Kontaktaufnahme:</strong><br>
+                Wenn Sie mich per E-Mail kontaktieren, verarbeite ich die von Ihnen übermittelten Angaben, um Ihre
+                Anfrage zu beantworten. Rechtsgrundlage ist mein berechtigtes Interesse an der Bearbeitung
+                eingehender Anfragen (Art. 6 Abs. 1 lit. f DSGVO); bei einer Anfrage im Zusammenhang mit einem
+                Vertragsverhältnis kann Art. 6 Abs. 1 lit. b DSGVO maßgeblich sein. Die Daten werden gelöscht,
+                sobald die Anfrage abschließend bearbeitet ist, sofern keine gesetzlichen Aufbewahrungspflichten
+                entgegenstehen oder die Daten zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen
+                benötigt werden.</p>
+
+            <p><strong>Ihre Rechte:</strong><br>
+                Sie haben im Rahmen der gesetzlichen Voraussetzungen das Recht auf Auskunft, Berichtigung,
+                Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch gegen eine
+                Verarbeitung auf Grundlage berechtigter Interessen. Zur Ausübung Ihrer Rechte können Sie mich
+                unter der oben genannten E-Mail-Adresse kontaktieren. Sie haben außerdem das Recht, eine
+                Beschwerde bei der österreichischen
+                <a href="https://www.dsb.gv.at/" target="_blank" rel="noopener noreferrer">Datenschutzbehörde</a>
+                einzubringen.
+            </p>
+
+            <p><strong>Haftungsausschluss:</strong><br>
+                Die Inhalte wurden sorgfältig erstellt. Für die Richtigkeit und Vollständigkeit der Aufgaben und
+                Lösungen wird keine Gewähr übernommen.</p>
+        </div>
+    </div>
+
+    <script src="fragen.js"></script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>
